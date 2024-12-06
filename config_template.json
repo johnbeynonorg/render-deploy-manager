@@ -1,6 +1,6 @@
 {
 	"api_key":"Add your Render API key here",
-	"groups": [
+	"groups": [ // Groups are groups of services that you want to trigger deploys on together. 
 		{
 			"name": "Give this group a name",
 			"deploy_key": "generate a random string of characters and put it here",

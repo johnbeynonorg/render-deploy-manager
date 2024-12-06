@@ -1,13 +1,12 @@
 # Render Deploy Manager 
 
-A utility service to allow control of deploys across multiple services using either a parallel or sequential strategegy. 
+A utility service to allow control of deploys across multiple services using either a parallel or sequential strategy. Most useful if you have auto deploy set to false for services.
 
-## Usage
+### Usage
 
-* Deploy this service as a Render blueprint to your account
-* Use the `config_template.json` to prepare config and add it as secret file to the deployed service
-* Make a GET request to /deploy?deploy_key=<your `deploy_key` value>
-* Wait.
+* Deploy this service as a Render Blueprint to your account
+* Use the `config_template.json` to prepare config and add it as secret file to the deployed service naming it `config.json` and ensure the service is deployed
+* Make a GET request to /deploy?deploy_key=<one of your `deploy_key` values>* The service log output will show whats going on
 
 
 ### Parallel strategy
@@ -45,5 +44,6 @@ Deploy dep-ct9ei0hopnds73e8fhhg is live! ✅
 All services in the group were deployed successfully! 🚀
 ```
 
+### To Do:
 
-```
+* Implement rollback if a deployment fails
