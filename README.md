@@ -4,7 +4,8 @@ A utility service to allow control of deploys across multiple services using eit
 
 ---
 
-## Usage
+### Usage
+
 
 * Deploy this service as a Render Blueprint to your account
 * Use the `config_template.json` to prepare config and add it as secret file to the deployed service naming it `config.json` and ensure the service is deployed
