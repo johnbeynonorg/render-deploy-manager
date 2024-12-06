@@ -4,13 +4,17 @@ A utility service to allow control of deploys across multiple services using eit
 
 ---
 
-### Usage
+## Deployment
 
 
 * Deploy this service as a Render Blueprint to your account
 * Use the `config_template.json` to prepare config and add it as secret file to the deployed service naming it `config.json` and ensure the service is deployed
-* Make a GET request to /deploy?deploy_key=<one of your `deploy_key` values>* The service log output will show whats going on
 
+
+## Usage
+
+* Make a GET request to <render service>/deploy?deploy_key=<one of your `deploy_key` values>
+* Observe the service log output to see whats going on
 
 ### Parallel strategy
 
