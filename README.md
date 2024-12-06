@@ -53,4 +53,5 @@ All services in the group were deployed successfully! 🚀
 
 ### To Do:
 
+* For parallel deploys poll for successful deploys before indicating all services we deployed successfully
 * Implement rollback if a deployment fails
