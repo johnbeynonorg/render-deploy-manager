@@ -1,0 +1,19 @@
+{
+	"api_key":"Add your Render API key here",
+	"groups": [
+		{
+			"name": "Give this group a name",
+			"deploy_key": "generate a random string of characters and put it here",
+            "strategy": "parallel|sequential",
+			"failure": "rollback",
+			"services": [ // Ordering matters here. This is the order deploys will occur in
+				{
+					"service_id": "serviceID to deploy"
+				},
+				{
+					"service_id": "serviceID to deploy"
+				}
+			]            
+		}
+	]
+}
