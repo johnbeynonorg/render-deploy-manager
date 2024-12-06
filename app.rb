@@ -6,7 +6,6 @@ require 'net/http'
 
 get '/health' do
   status 200
-  "OK"
 end
 
 get '/deploy' do

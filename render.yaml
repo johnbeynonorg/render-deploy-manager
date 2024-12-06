@@ -3,6 +3,6 @@ services:
     name: render-service-manager
     plan: starter
     env: ruby
-    buildCommand: ./render-build.sh
-    startCommand: ./render-start.sh
+    buildCommand: ./bin/render-build.sh
+    startCommand: ./bin/render-start.sh
     healthCheckPath: /health
