@@ -29,7 +29,7 @@ get '/deploy' do
         results << {service_id: service["service_id"], deploy_id: deployment["id"], result: result}
         if result == "failed"
           puts "Deploy #{deployment["id"]} failed ❌"
-          break
+          break # Stop any more deployments if one fails
         end
       end
     elsif target_group["strategy"] == "parallel" # handle parallel deploys
@@ -46,15 +46,20 @@ get '/deploy' do
           # need to find where in the results was the failure. If it's the first one, we don't need to do anything
           if result[:result] == "failed"
             if index > 0
-              puts "Rolling back service #{result[:service_id]}"
               puts "#{results[index-1][:service_id]} needs to be rolled back"
-              # TODO: Implement rollback_deploy
-              # Can't query API for deploys by status, we would need to rollback to the last successful deploy
-              # rollback_deploy(results[index-1][:service_id], api_key)
+
+              # What was the last deployment that was deactivated?
+              last_deactivated_deployment = get_last_deactivated_deployment(results[index-1][:service_id], api_key)
+              last_deactivated_deployment_id = last_deactivated_deployment['deploy']['id']
+
+              # Trigger the rollback and get a new deployment id for the rollback
+              rollback_deployment = rollback_deploy(results[index-1][:service_id], last_deactivated_deployment_id, api_key)
+              puts "Rolling back #{results[index-1][:service_id]} to #{last_deactivated_deployment_id} because #{result[:service_id]} failed"
+              wait_for_successful_deploy(results[index-1][:service_id], rollback_deployment["id"], api_key)
             else
               puts "No need to rollback service #{result[:service_id]} as it was the first in the group to fail"
+              break
             end
-            break
           end
         end
       end
@@ -102,6 +107,20 @@ def trigger_deployment(service_id, api_key)
   response
 end
 
+def get_last_deactivated_deployment(service_id, api_key)
+  url = URI("https://api.render.com/v1/services/#{service_id}/deploys?status=deactivated&limit=1")
+
+  http = Net::HTTP.new(url.host, url.port)
+  http.use_ssl = true
+
+  request = Net::HTTP::Get.new(url)
+  request["accept"] = 'application/json'
+  request["content-type"] = 'application/json'
+  request["authorization"] =  "Bearer #{api_key}"
+
+  JSON.parse(http.request(request).read_body).first
+end
+
 def get_deployment(service_id, deploy_id, api_key)
   url = URI("https://api.render.com/v1/services/#{service_id}/deploys/#{deploy_id}")
 
@@ -122,14 +141,13 @@ def rollback_deploy(service_id, deploy_id, api_key)
   http = Net::HTTP.new(url.host, url.port)
   http.use_ssl = true
 
-  request = Net::HTTP::Get.new(url)
+  request = Net::HTTP::Post.new(url)
   request["accept"] = 'application/json'
   request["content-type"] = 'application/json'
   request["authorization"] =  "Bearer #{api_key}"
-  request.body = "{\"deployId\":\"#{deploy_id}\"}"
+  request.body = {deployId: deploy_id}.to_json
 
   puts "Rollback triggered for #{service_id} to #{deploy_id}"
-
   JSON.parse(http.request(request).read_body)
 end
 
