@@ -3,6 +3,7 @@ services:
     name: render-service-manager
     plan: starter
     env: ruby
+    autoDeploy: false
     buildCommand: ./bin/render-build.sh
     startCommand:  echo "Start Command changed!" && ./bin/render-start.sh
     healthCheckPath: /health
