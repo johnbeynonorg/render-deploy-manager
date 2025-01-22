@@ -4,6 +4,9 @@ services:
     plan: starter
     env: ruby
     autoDeploy: false
+    buildFilter:
+      ignoredPaths:
+      - render.yaml
     buildCommand: ./bin/render-build.sh
     startCommand:  echo "Start Command changed!!" && ./bin/render-start.sh
     healthCheckPath: /health
