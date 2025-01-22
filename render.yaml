@@ -4,5 +4,5 @@ services:
     plan: starter
     env: ruby
     buildCommand: ./bin/render-build.sh
-    startCommand: ./bin/render-start.sh
+    startCommand:  echo "Start Command changed!" && ./bin/render-start.sh
     healthCheckPath: /health
